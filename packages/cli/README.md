@@ -1,38 +1,88 @@
 # @open-slide/cli
 
-Scaffold a workspace for [open-slide](https://github.com/open-slide/open-slide) — a React-based slide framework with Claude Code skills preconfigured.
+@open-slide/cli 是 open-slide 的「建立專案工具」。
 
-## Usage
+它不是投影片編輯器，也不是可以直接安裝到 ChatGPT 的 Skill。它的工作是幫你準備好一個可以製作投影片的資料夾。
 
-```bash
+## 最簡單的用法
+
+在終端機輸入：
+
+~~~bash
 npx @open-slide/cli init my-slide
+~~~
+
+這會建立 my-slide 資料夾，並放入：
+
+- 一張可以參考的範例投影片。
+- @open-slide/core，負責顯示、播放和建置。
+- open-slide.config.ts，可選的設定檔。
+- .claude/skills/ 和 .agents/skills/，給程式 AI 使用的 Skill。
+- CLAUDE.md，告訴程式 AI 如何製作投影片。
+
+建立完成後，進入資料夾並啟動：
+
+~~~bash
 cd my-slide
-pnpm install
-pnpm dev
-```
+npm run dev
+~~~
 
-This creates a workspace containing:
+npx 執行時，CLI 會自動安裝相依套件。如果安裝沒有成功，再手動執行：
 
-- `slides/getting-started/` — a starter slide you can edit or delete.
-- `package.json` — depends on `@open-slide/core`, which provides the runtime (home page, slide viewer, fullscreen mode) and the `open-slide` CLI.
-- `open-slide.config.ts` — optional typed config (slidesDir, port).
-- `.claude/skills/` and `.agents/skills/` — Claude Code skills (`create-slide`, `apply-comments`, …).
-- `CLAUDE.md` — agent guide for authoring slides.
+~~~bash
+npm install
+~~~
 
-You won't see any Vite, React, or tsconfig files in the workspace. They live inside `@open-slide/core` and you never touch them.
+## 這個工具會做什麼？
 
-## Commands
+可以把它想成「幫你整理好空房間的人」：
 
-| Command | Description |
+1. 建立專案資料夾。
+2. 放入範例投影片。
+3. 放入 React 和 open-slide 核心套件。
+4. 放入 AI Skill。
+5. 視需要初始化 Git。
+6. 安裝專案需要的套件。
+
+完成後，真正的投影片會放在：
+
+~~~text
+slides/<投影片名稱>/index.tsx
+~~~
+
+## 指令
+
+| 指令 | 用途 |
 | --- | --- |
-| `open-slide init [dir]` | Scaffold a new workspace in `dir` (defaults to current dir). |
-| `open-slide init --force` | Scaffold into a non-empty directory. |
-| `open-slide init --name <name>` | Override the generated `package.json` name. |
+| open-slide init [dir] | 在指定資料夾建立專案；沒有指定時使用目前資料夾。 |
+| open-slide init --force | 允許在不是空的資料夾裡建立專案。 |
+| open-slide init --name <name> | 指定產生的 package.json 專案名稱。 |
+| open-slide init --use-npm | 使用 npm 安裝套件。 |
+| open-slide init --use-pnpm | 使用 pnpm 安裝套件。 |
+| open-slide init --use-yarn | 使用 Yarn 安裝套件。 |
+| open-slide init --use-bun | 使用 Bun 安裝套件。 |
+| open-slide init --no-install | 只建立檔案，不安裝套件。 |
+| open-slide init --no-git | 不建立 Git 儲存庫。 |
 
-(Once installed in the workspace, `@open-slide/core` provides `open-slide dev`, `open-slide build`, and `open-slide preview` via its own bin.)
+如果資料夾裡已經有檔案，CLI 會先提醒你。除非你真的知道自己要做什麼，不要使用 --force，避免覆蓋或混合現有專案。
 
-## Authoring
+## 產生的專案裡有什麼？
 
-Inside the scaffolded workspace, slides live under `slides/<kebab-case-id>/index.tsx` and default-export an array of `Page` components. Each page renders into a fixed 1920×1080 canvas; the framework handles scaling.
+你不會看到 Vite、React 或 TypeScript 的大量設定檔，因為這些東西已經藏在 @open-slide/core 裡。一般使用者不需要碰它們。
 
-Ask Claude Code to "make slides about X" and the `create-slide` skill will take it from there.
+使用者只要記得：
+
+- npm run dev：開始製作和預覽。
+- npm run build：建立可以發布的版本。
+- npm run preview：預覽正式版本。
+- npm run sync:skills：更新專案裡的 AI Skill。
+
+## 給 AI 的使用方式
+
+在專案資料夾裡開啟 Claude Code、Codex 或 Cursor，然後說：
+
+~~~text
+請幫我做一份關於「我的主題」的簡報。
+~~~
+
+CLI 已經準備好 AI 需要的 Skill，AI 會讀取 create-slide 和 slide-authoring 的說明來製作投影片。
