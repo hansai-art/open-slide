@@ -128,6 +128,26 @@ npm run dev
 
 如果程式 AI 看得到這個專案裡的 Skill，它會使用 /create-slide 來建立簡報。
 
+### 操作畫面：AI 正在建立投影片
+
+下面這張是真實的操作畫面。左邊是 AI 對話區，AI 會先詢問簡報主題、頁數和視覺風格；中間是 open-slide 的簡報預覽；右邊是專案檔案。
+
+![AI 使用 create-slide Skill 建立簡報](apps/demo/slides/open-slide-on-replit/assets/create-slide-skill.webp)
+
+你要做的事情很簡單：回答 AI 的問題，等待它建立投影片，接著在中間的預覽區檢查結果。
+
+### 操作畫面：建立專案的指令
+
+這張圖顯示建立 open-slide 專案時使用的指令。實際操作時，請直接複製 README 上方的中文指令：
+
+~~~bash
+npx @open-slide/cli init my-slide
+~~~
+
+![建立 open-slide 專案的指令](apps/demo/slides/open-slide-on-replit/assets/init-command.webp)
+
+這張圖裡的文字是英文，但真正需要記住的只有上面的那一行指令。
+
 你不需要自己先寫 React，也不需要先學會 1920 × 1080 的程式寫法。先用自然語言說你想要的內容，之後再請 AI 修改。
 
 ## 你到底要安裝什麼？
