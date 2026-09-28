@@ -1,27 +1,33 @@
-# open-slide workspace
+# open-slide 專案
 
-Slides as React components. Each slide lives under `slides/<id>/index.tsx` and default-exports an array of page components. The `@open-slide/core` runtime handles layout, scaling, navigation, thumbnails, and fullscreen play mode — you just write the pages.
+這是一個可以直接執行的 open-slide 範例專案。
 
-## Getting started
+每一份投影片都放在 slides/<id>/index.tsx，並輸出一組頁面元件。你只需要寫頁面，@open-slide/core 會處理版面、縮放、頁面切換、縮圖和全螢幕播放。
 
-```bash
+## 開始使用
+
+~~~bash
 pnpm install
 pnpm dev
-```
+~~~
 
-Then open the dev server and edit `slides/getting-started/index.tsx`, or create a new slide at `slides/<your-slide>/index.tsx`.
+啟動後，在瀏覽器打開終端機顯示的網址，再修改：
 
-## Scripts
+~~~text
+slides/getting-started/index.tsx
+~~~
 
-| Command | Description |
+## 指令
+
+| 指令 | 用途 |
 | --- | --- |
-| `pnpm dev` | Start the dev server with hot reload. |
-| `pnpm build` | Build a static bundle you can deploy. |
-| `pnpm preview` | Preview the built bundle locally. |
+| pnpm dev | 啟動開發伺服器，修改後會即時更新。 |
+| pnpm build | 建立可以部署的靜態網站。 |
+| pnpm preview | 在本機預覽建置完成的網站。 |
 
-## Authoring a slide
+## 手動寫一頁投影片
 
-```tsx
+~~~tsx
 // slides/my-slide/index.tsx
 import type { Page, SlideMeta } from '@open-slide/core';
 
@@ -31,27 +37,39 @@ const Cover: Page = () => (
 
 export const meta: SlideMeta = { title: 'My slide' };
 export default [Cover] satisfies Page[];
-```
+~~~
 
-Every page renders into a fixed **1920 × 1080** canvas — design with absolute pixel values. Put images, videos, and fonts under `slides/<id>/assets/` and import them directly.
+每頁都是固定的 **1920 × 1080** 畫布，設計時可以直接使用像素值。圖片、影片和字型請放在 slides/<id>/assets/，然後在投影片程式碼裡載入。
 
-See [`CLAUDE.md`](./CLAUDE.md) for the full authoring guide.
+完整的投影片製作規則請看 CLAUDE.md。
 
-## Navigation
+## 操作方式
 
-- Arrow keys / PageUp / PageDown move between pages.
-- `F` enters fullscreen play mode; Esc exits.
-- In play mode: Space / → next, ← prev.
+- 方向鍵、PageUp、PageDown：切換頁面。
+- F：進入全螢幕播放。
+- Esc：離開全螢幕。
+- 播放時按空白鍵或右方向鍵：下一頁。
+- 播放時按左方向鍵：上一頁。
 
-## Claude Code integration
+## Claude Code 和其他程式 AI
 
-This workspace ships with Claude Code skills preconfigured under `.claude/skills/` and `.agents/skills/`. Ask Claude Code to "make slides about X" and the `create-slide` skill takes over. Use `apply-comments` to iterate via inspector-style markers inside your source.
+這個專案裡已經準備好 .claude/skills/ 和 .agents/skills/。
 
-## Config
+在這個資料夾裡開啟 Claude Code、Codex 或 Cursor，說：
 
-Optional `open-slide.config.ts` at the workspace root:
+~~~text
+請幫我做一份關於「我的主題」的簡報。
+~~~
 
-```ts
+AI 會使用 create-slide Skill 來建立投影片。想根據瀏覽器裡留下的修改意見更新內容時，可以使用 apply-comments。
+
+這些 Skill 是放在專案裡的輔助說明，不代表 open-slide 本身就是 Skill。
+
+## 設定檔
+
+可以在專案根目錄建立 open-slide.config.ts：
+
+~~~ts
 import type { OpenSlideConfig } from '@open-slide/core';
 
 const openSlideConfig: OpenSlideConfig = {
@@ -59,6 +77,6 @@ const openSlideConfig: OpenSlideConfig = {
 };
 
 export default openSlideConfig;
-```
+~~~
 
-Supported fields: `slidesDir`, `port`.
+支援的欄位是：slidesDir、port。
