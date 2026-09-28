@@ -245,6 +245,24 @@ npm run dev
 
 每頁都會放在固定的 1920 × 1080 畫布裡，open-slide 會依照瀏覽器視窗大小自動縮放。
 
+### 操作畫面：編輯投影片
+
+啟動網站後，你會看到左邊的頁面縮圖、中間的投影片、右邊的設計和檢查工具。你可以先點選左邊的頁面，再查看或修改中間的內容。
+
+![open-slide 投影片編輯畫面](apps/web/public/assets/screenshots/open-slide-cover.webp)
+
+### 操作畫面：檢查文字並留下修改意見
+
+點選投影片上的文字或圖形後，右側會出現檢查面板。你可以在下方留下修改意見，再請 AI 執行 /apply-comments。
+
+![open-slide 檢查器和留言畫面](apps/web/public/assets/screenshots/inspector.webp)
+
+### 操作畫面：簡報者模式
+
+按下 F 進入全螢幕播放；如果需要一邊看目前頁面、一邊看下一頁和講者備註，可以使用簡報者模式。
+
+![open-slide 簡報者模式](apps/web/public/assets/screenshots/presenter.webp)
+
 ## 圖片、影片和字型放在哪裡？
 
 每一份簡報可以有自己的素材資料夾：
