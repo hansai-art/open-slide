@@ -1,36 +1,61 @@
 # @open-slide/core
 
-Runtime and CLI for [open-slide](https://github.com/open-slide/open-slide) — a React-based slide framework where you write slides and the framework handles the Vite/React stack, layout, navigation, hot reload, and fullscreen play mode.
+@open-slide/core 是 open-slide 的核心套件。
 
-## Install
+它負責：
 
-```bash
+- 顯示投影片。
+- 讓投影片可以切換和全螢幕播放。
+- 啟動開發伺服器。
+- 即時重新載入修改。
+- 把投影片建置成可以發布的網站。
+- 讀取 slides/<id>/index.{tsx,jsx,ts,js} 裡的投影片。
+
+一般使用者不需要單獨安裝它。執行：
+
+~~~bash
+npx @open-slide/cli init my-slide
+~~~
+
+建立專案時，CLI 會自動把它裝好。只有在你自己手動建立既有 React 專案時，才需要直接安裝：
+
+~~~bash
 pnpm add @open-slide/core
-```
+~~~
 
-Most users get this installed automatically by running `npx @open-slide/cli init`. Use this package directly only if you're wiring up an existing workspace by hand.
+## 這個套件裡有什麼？
 
-## What's inside
+- 執行環境：首頁、投影片檢視器、縮圖列、鍵盤切換和全螢幕播放。
+- Vite 外掛：自動找到投影片檔案。
+- 命令列工具：提供 open-slide dev、open-slide build 和 open-slide preview。
 
-- **Runtime** — home page, slide viewer, thumbnail rail, keyboard navigation, and fullscreen presenter mode. Every slide renders into a fixed **1920×1080** canvas; the framework scales it.
-- **Vite plugin** — discovers `slides/<id>/index.{tsx,jsx,ts,js}`, exposes them via virtual modules, and reloads when slides are added or removed.
-- **CLI** — `open-slide dev | build | preview` so workspaces never need to touch Vite, React, or tsconfig directly.
+每頁固定使用 **1920 × 1080** 畫布，畫面大小由框架自動縮放。
 
-## CLI
+## 指令
 
-Once installed, the `open-slide` bin is available in the workspace:
+在已建立的 open-slide 專案裡，可以使用：
 
-| Command | Description |
+| 指令 | 用途 |
 | --- | --- |
-| `open-slide dev` | Start the dev server. Flags: `-p, --port <port>`, `--host [host]`, `--open`. |
-| `open-slide build` | Build a static site. Flags: `--out-dir <dir>` (defaults to `dist`). |
-| `open-slide preview` | Preview the production build. Flags: `-p, --port <port>`, `--host [host]`, `--open`. |
+| open-slide dev | 啟動開發伺服器。 |
+| open-slide build | 建立正式的靜態網站，預設輸出到 dist。 |
+| open-slide preview | 在本機預覽正式版本。 |
+| open-slide sync:skills | 更新專案裡的 Skill。 |
 
-## Config
+通常不需要直接輸入這些指令，使用專案提供的指令即可：
 
-Create `open-slide.config.ts` in the workspace root (all fields optional):
+~~~bash
+npm run dev
+npm run build
+npm run preview
+npm run sync:skills
+~~~
 
-```ts
+## 設定檔
+
+如果需要調整資料夾或連接埠，可以在專案根目錄建立 open-slide.config.ts：
+
+~~~ts
 import type { OpenSlideConfig } from '@open-slide/core';
 
 const openSlideConfig: OpenSlideConfig = {
@@ -39,25 +64,25 @@ const openSlideConfig: OpenSlideConfig = {
 };
 
 export default openSlideConfig;
-```
+~~~
 
-### Hosting under a subpath
+所有欄位都是可選的。
 
-Set `base` to deploy the built site under a sub-directory (intranet folders, GitHub Pages project sites, reverse proxies). Use a leading and trailing slash:
+如果要把網站放在子路徑，例如 GitHub Pages 的專案網址，可以設定：
 
-```ts
+~~~ts
 const openSlideConfig: OpenSlideConfig = {
   base: '/my-slides/',
 };
-```
+~~~
 
-The value is passed straight to Vite's `base` and to React Router's `basename`, so client-side navigation matches the deployed path.
+base 的前後都要有 /。
 
-## Authoring slides
+## 手動寫一頁投影片
 
-Slides live under `slides/<kebab-case-id>/index.tsx` and default-export an array of `Page` components:
+投影片通常放在 slides/<投影片名稱>/index.tsx：
 
-```tsx
+~~~tsx
 import type { Page } from '@open-slide/core';
 
 const Cover: Page = () => (
@@ -70,29 +95,16 @@ const pages: Page[] = [Cover];
 export default pages;
 
 export const meta = { title: 'Hello' };
-```
+~~~
 
-## Exports
+進階使用者也可以從核心套件匯入 Page、SlideMeta、SlideModule、SlideTransition 和 OpenSlideConfig 等型別，或直接使用 @open-slide/core/vite 的 Vite 外掛。
 
-```ts
-import {
-  CANVAS_WIDTH,   // 1920
-  CANVAS_HEIGHT,  // 1080
-  MorphElement,   // match or fade objects across pages for morph transitions
-  type Page,
-  type SlideMeta,
-  type SlideModule,
-  type SlideTransition,
-  type OpenSlideConfig,
-} from '@open-slide/core';
-```
+## 什麼時候看這份文件？
 
-The Vite plugin is exposed under a subpath for advanced setups:
+- 只是想做簡報：看根目錄的中文 README。
+- 想建立專案：看 @open-slide/cli 的說明。
+- 想修改框架本身：看這份說明和原始碼。
 
-```ts
-import { createViteConfig } from '@open-slide/core/vite';
-```
-
-## License
+## 授權
 
 MIT
